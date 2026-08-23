@@ -76,3 +76,53 @@ Anonymized content-performance data
                 |
                 v
        Manual content decision
+
+
+
+
+flyrank-ml-internship/
+│
+├── data/
+│   └── raw/
+│       └── content_refresh_anonymized.csv
+│
+├── notebooks/
+│   └── First-win notebooks
+│
+├── work/
+│   ├── notebooks/
+│   │   ├── w01_research_question.ipynb
+│   │   ├── w02_ml_task_framing.ipynb
+│   │   ├── w03_data_contract.ipynb
+│   │   ├── w03_feature_leakage_check.ipynb
+│   │   ├── w04_signal_audit.ipynb
+│   │   ├── w04_baseline_score.ipynb
+│   │   ├── w05_model.ipynb
+│   │   ├── w06_validation_audit.ipynb
+│   │   ├── w07_action_playbook.ipynb
+│   │   └── capstone.ipynb
+│   │
+│   ├── outputs/
+│   │   └── w07_ranked_action_queue.csv
+│   │
+│   └── figures/
+│
+├── docs/
+│   ├── data-dictionary.md
+│   ├── ml-core-foundation-framework.md
+│   ├── ml-intern-dataset-and-lane-guide.md
+│   └── intern-free-tooling-guide.md
+│
+├── scripts/
+│   ├── 01_prepare_features.py
+│   ├── 02_baseline_score.py
+│   ├── 03_train_model.py
+│   ├── 04_evaluate_and_export.py
+│   ├── 05_build_pdf_report.py
+│   └── run_all.py
+│
+├── DATA_USE.md
+├── GUIDE.md
+├── SETUP.md
+├── requirements.txt
+└── README.md
