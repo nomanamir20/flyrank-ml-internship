@@ -4,31 +4,38 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+    <title>
+        Predicting Content Decline to Prioritize Human SEO Review
+    </title>
+
     <meta
         name="description"
-        content="Research paper on using machine learning to prioritize declining keyword-article content for human review."
+        content="A research artifact investigating machine-learning-based prioritization of declining keyword-article content for human SEO review."
     >
-
-    <title>
-        Machine Learning for Prioritizing Declining Keyword-Article Content
-    </title>
 
     <style>
         :root {
-            --bg: #f7f8fa;
+            --bg: #f6f8f7;
             --surface: #ffffff;
-            --text: #17202a;
-            --muted: #667085;
-            --border: #e4e7ec;
-            --accent: #176b5b;
-            --accent-light: #eaf6f2;
-            --accent-dark: #0f4d42;
-            --shadow: 0 10px 30px rgba(16, 24, 40, 0.06);
-            --max-width: 1080px;
+            --surface-soft: #f0f4f2;
+            --text: #17211d;
+            --muted: #65736c;
+            --line: #dce4df;
+            --green: #176b4d;
+            --green-dark: #0f4f39;
+            --green-light: #e5f2ec;
+            --accent: #cfe8dc;
+            --warning: #fff5df;
+            --warning-border: #e7c97b;
+            --shadow: 0 10px 35px rgba(23, 33, 29, 0.07);
+            --radius: 16px;
+            --max-width: 1120px;
         }
 
         * {
             box-sizing: border-box;
+            margin: 0;
+            padding: 0;
         }
 
         html {
@@ -36,24 +43,21 @@
         }
 
         body {
-            margin: 0;
-            background: var(--bg);
-            color: var(--text);
             font-family:
                 Inter,
                 ui-sans-serif,
+                system-ui,
                 -apple-system,
                 BlinkMacSystemFont,
                 "Segoe UI",
-                Roboto,
-                Helvetica,
-                Arial,
                 sans-serif;
+            background: var(--bg);
+            color: var(--text);
             line-height: 1.75;
         }
 
         a {
-            color: var(--accent);
+            color: var(--green);
             text-decoration: none;
         }
 
@@ -61,257 +65,505 @@
             text-decoration: underline;
         }
 
-        .page {
-            width: min(100% - 32px, var(--max-width));
-            margin: 0 auto;
-            padding: 48px 0 80px;
-        }
-
-        /* =========================
-           HERO
-        ========================= */
-
-        .hero {
-            background: var(--surface);
-            border: 1px solid var(--border);
-            border-radius: 20px;
-            padding: 56px;
-            box-shadow: var(--shadow);
-            margin-bottom: 28px;
-        }
-
-        .eyebrow {
-            display: inline-block;
-            margin-bottom: 18px;
-            padding: 6px 12px;
-            border-radius: 999px;
-            background: var(--accent-light);
-            color: var(--accent-dark);
-            font-size: 0.82rem;
-            font-weight: 700;
-            letter-spacing: 0.04em;
-            text-transform: uppercase;
-        }
-
-        .hero h1 {
-            max-width: 900px;
-            margin: 0;
+        code {
             font-family:
-                Georgia,
-                "Times New Roman",
-                serif;
-            font-size: clamp(2.3rem, 5vw, 4.4rem);
-            line-height: 1.08;
-            letter-spacing: -0.035em;
-        }
-
-        .subtitle {
-            max-width: 820px;
-            margin: 24px 0 0;
-            color: var(--muted);
-            font-size: 1.12rem;
-        }
-
-        .author {
-            margin-top: 30px;
-            font-weight: 700;
-            font-size: 1rem;
-        }
-
-        .affiliation {
-            margin: 2px 0 0;
-            color: var(--muted);
+                "SFMono-Regular",
+                Consolas,
+                "Liberation Mono",
+                monospace;
+            font-size: 0.9em;
+            background: var(--surface-soft);
+            padding: 0.15rem 0.4rem;
+            border-radius: 5px;
         }
 
         /* =========================
-           NAVIGATION
-        ========================= */
+           HEADER
+           ========================= */
 
-        .toc {
+        .topbar {
             position: sticky;
-            top: 12px;
-            z-index: 10;
-            display: flex;
-            gap: 8px;
-            overflow-x: auto;
-            padding: 10px;
-            margin-bottom: 28px;
+            top: 0;
+            z-index: 100;
             background: rgba(255, 255, 255, 0.94);
-            border: 1px solid var(--border);
-            border-radius: 14px;
             backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--line);
         }
 
-        .toc a {
-            flex: 0 0 auto;
-            padding: 7px 11px;
-            border-radius: 9px;
+        .topbar-inner {
+            max-width: var(--max-width);
+            margin: auto;
+            padding: 0.8rem 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 1rem;
+        }
+
+        .brand {
+            font-weight: 800;
+            letter-spacing: -0.02em;
+            color: var(--green-dark);
+        }
+
+        .brand span {
             color: var(--muted);
-            font-size: 0.86rem;
-            font-weight: 600;
-            white-space: nowrap;
+            font-weight: 500;
         }
 
-        .toc a:hover {
-            background: var(--accent-light);
-            color: var(--accent-dark);
+        nav {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        nav a {
+            font-size: 0.82rem;
+            color: var(--muted);
+            font-weight: 600;
+        }
+
+        nav a:hover {
+            color: var(--green);
             text-decoration: none;
         }
 
         /* =========================
-           PAPER SECTIONS
-        ========================= */
+           HERO
+           ========================= */
 
-        .section {
-            background: var(--surface);
-            border: 1px solid var(--border);
-            border-radius: 18px;
-            padding: 42px 48px;
-            margin-bottom: 24px;
-            box-shadow: var(--shadow);
+        .hero {
+            background:
+                radial-gradient(
+                    circle at 80% 20%,
+                    rgba(23, 107, 77, 0.10),
+                    transparent 30%
+                ),
+                linear-gradient(
+                    135deg,
+                    #ffffff,
+                    #eef5f1
+                );
+            border-bottom: 1px solid var(--line);
         }
 
-        .section-number {
-            margin-bottom: 8px;
-            color: var(--accent);
-            font-size: 0.82rem;
+        .hero-inner {
+            max-width: var(--max-width);
+            margin: auto;
+            padding: 7rem 1.5rem 6rem;
+        }
+
+        .eyebrow {
+            display: inline-block;
+            color: var(--green);
             font-weight: 800;
-            letter-spacing: 0.08em;
+            font-size: 0.78rem;
+            letter-spacing: 0.14em;
             text-transform: uppercase;
+            margin-bottom: 1rem;
         }
 
-        h2 {
-            margin: 0 0 24px;
-            font-family:
-                Georgia,
-                "Times New Roman",
-                serif;
-            font-size: clamp(1.8rem, 3vw, 2.5rem);
-            line-height: 1.2;
+        .hero h1 {
+            max-width: 900px;
+            font-size: clamp(2.5rem, 6vw, 5rem);
+            line-height: 1.03;
+            letter-spacing: -0.055em;
+            margin-bottom: 1.5rem;
+        }
+
+        .hero-description {
+            max-width: 760px;
+            color: var(--muted);
+            font-size: 1.15rem;
+        }
+
+        .hero-meta {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.7rem;
+            margin-top: 2rem;
+        }
+
+        .tag {
+            background: var(--surface);
+            border: 1px solid var(--line);
+            padding: 0.45rem 0.8rem;
+            border-radius: 999px;
+            color: var(--muted);
+            font-size: 0.8rem;
+            font-weight: 700;
+        }
+
+        /* =========================
+           LAYOUT
+           ========================= */
+
+        .paper {
+            max-width: var(--max-width);
+            margin: auto;
+            padding: 4rem 1.5rem 7rem;
+        }
+
+        .paper-section {
+            padding: 4rem 0;
+            border-bottom: 1px solid var(--line);
+        }
+
+        .paper-section:last-child {
+            border-bottom: none;
+        }
+
+        .section-label {
+            color: var(--green);
+            font-size: 0.76rem;
+            font-weight: 900;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            margin-bottom: 0.8rem;
+        }
+
+        .paper-section h2 {
+            font-size: clamp(1.9rem, 4vw, 3rem);
+            line-height: 1.15;
+            letter-spacing: -0.035em;
+            margin-bottom: 1.4rem;
+        }
+
+        .paper-section h3 {
+            font-size: 1.25rem;
+            margin: 2.2rem 0 0.8rem;
             letter-spacing: -0.02em;
         }
 
-        h3 {
-            margin-top: 32px;
-            margin-bottom: 12px;
-            font-size: 1.25rem;
-        }
-
-        p {
-            margin: 0 0 18px;
+        .paper-section p {
+            max-width: 850px;
+            margin-bottom: 1rem;
         }
 
         .lead {
-            font-size: 1.08rem;
-            color: #344054;
+            color: var(--muted);
+            font-size: 1.15rem;
+            max-width: 800px;
+            margin-bottom: 2rem;
         }
 
         /* =========================
            ABSTRACT
-        ========================= */
+           ========================= */
 
         .abstract-box {
-            padding: 28px;
-            background: #fbfcfd;
-            border-left: 4px solid var(--accent);
-            border-radius: 0 12px 12px 0;
+            background: var(--surface);
+            border: 1px solid var(--line);
+            border-radius: var(--radius);
+            padding: 2rem;
+            box-shadow: var(--shadow);
         }
 
-        .abstract-box p:last-child {
-            margin-bottom: 0;
+        .abstract-box h3 {
+            margin-top: 0;
+        }
+
+        .key-facts {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+
+        .fact {
+            background: var(--surface);
+            border: 1px solid var(--line);
+            border-radius: var(--radius);
+            padding: 1.4rem;
+        }
+
+        .fact-value {
+            display: block;
+            color: var(--green-dark);
+            font-size: 1.8rem;
+            line-height: 1.1;
+            font-weight: 900;
+        }
+
+        .fact-label {
+            display: block;
+            margin-top: 0.35rem;
+            color: var(--muted);
+            font-size: 0.82rem;
         }
 
         /* =========================
-           KEY FINDINGS
-        ========================= */
+           CARDS
+           ========================= */
+
+        .card-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+
+        .card {
+            background: var(--surface);
+            border: 1px solid var(--line);
+            border-radius: var(--radius);
+            padding: 1.5rem;
+        }
+
+        .card h3 {
+            margin-top: 0;
+        }
+
+        .card p {
+            margin-bottom: 0;
+            color: var(--muted);
+        }
+
+        /* =========================
+           TABLES
+           ========================= */
+
+        .table-wrapper {
+            overflow-x: auto;
+            margin: 1.5rem 0;
+            border: 1px solid var(--line);
+            border-radius: var(--radius);
+            background: var(--surface);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 650px;
+        }
+
+        th,
+        td {
+            text-align: left;
+            padding: 0.9rem 1rem;
+            border-bottom: 1px solid var(--line);
+        }
+
+        th {
+            background: var(--surface-soft);
+            color: var(--green-dark);
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+        }
+
+        tr:last-child td {
+            border-bottom: none;
+        }
+
+        /* =========================
+           METRIC CARDS
+           ========================= */
 
         .metrics {
             display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 14px;
-            margin: 28px 0;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 0.8rem;
+            margin: 1.5rem 0;
         }
 
         .metric {
-            padding: 20px;
-            border: 1px solid var(--border);
-            border-radius: 14px;
-            background: #fcfdfd;
+            background: var(--surface);
+            border: 1px solid var(--line);
+            border-radius: 12px;
+            padding: 1.1rem;
         }
 
-        .metric-label {
+        .metric strong {
+            display: block;
+            color: var(--green-dark);
+            font-size: 1.45rem;
+        }
+
+        .metric span {
             color: var(--muted);
-            font-size: 0.82rem;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 0.04em;
+            font-size: 0.76rem;
         }
 
-        .metric-value {
-            margin-top: 4px;
-            color: var(--accent-dark);
-            font-size: 1.7rem;
+        /* =========================
+           CALLOUTS
+           ========================= */
+
+        .callout {
+            margin: 1.5rem 0;
+            padding: 1.4rem 1.5rem;
+            border-left: 4px solid var(--green);
+            background: var(--green-light);
+            border-radius: 0 12px 12px 0;
+        }
+
+        .callout.warning {
+            background: var(--warning);
+            border-left-color: var(--warning-border);
+        }
+
+        .callout strong {
+            display: block;
+            margin-bottom: 0.3rem;
+        }
+
+        /* =========================
+           LISTS
+           ========================= */
+
+        ul,
+        ol {
+            max-width: 850px;
+            padding-left: 1.4rem;
+        }
+
+        li {
+            margin-bottom: 0.6rem;
+        }
+
+        /* =========================
+           CODE / ARCHITECTURE
+           ========================= */
+
+        .architecture {
+            margin: 1.5rem 0;
+            background: #17211d;
+            color: #e7f1ec;
+            border-radius: var(--radius);
+            padding: 1.5rem;
+            overflow-x: auto;
+            font-family:
+                "SFMono-Regular",
+                Consolas,
+                "Liberation Mono",
+                monospace;
+            font-size: 0.85rem;
+            line-height: 1.7;
+        }
+
+        /* =========================
+           RECOMMENDATION QUEUE
+           ========================= */
+
+        .recommendation {
+            display: grid;
+            grid-template-columns: 60px 1fr auto;
+            gap: 1rem;
+            align-items: start;
+            padding: 1.2rem 0;
+            border-bottom: 1px solid var(--line);
+        }
+
+        .recommendation:last-child {
+            border-bottom: none;
+        }
+
+        .rank {
+            width: 42px;
+            height: 42px;
+            border-radius: 50%;
+            background: var(--green-light);
+            color: var(--green-dark);
+            display: grid;
+            place-items: center;
+            font-weight: 900;
+        }
+
+        .recommendation h3 {
+            margin: 0 0 0.2rem;
+            font-size: 1rem;
+        }
+
+        .recommendation p {
+            margin: 0;
+            color: var(--muted);
+            font-size: 0.9rem;
+        }
+
+        .priority {
+            padding: 0.35rem 0.6rem;
+            background: var(--surface-soft);
+            border: 1px solid var(--line);
+            border-radius: 999px;
+            font-size: 0.72rem;
             font-weight: 800;
+            white-space: nowrap;
         }
 
         /* =========================
            FOOTER
-        ========================= */
+           ========================= */
 
         footer {
-            padding: 30px 10px;
-            color: var(--muted);
-            text-align: center;
+            background: #17211d;
+            color: #dbe7e1;
+        }
+
+        .footer-inner {
+            max-width: var(--max-width);
+            margin: auto;
+            padding: 3rem 1.5rem;
+        }
+
+        .footer-inner p {
+            max-width: 750px;
+            color: #aabbb2;
+        }
+
+        .footer-credit {
+            margin-top: 1rem;
             font-size: 0.9rem;
         }
 
         /* =========================
            RESPONSIVE
-        ========================= */
+           ========================= */
 
-        @media (max-width: 800px) {
-            .page {
-                width: min(100% - 20px, var(--max-width));
-                padding-top: 20px;
+        @media (max-width: 900px) {
+            nav {
+                display: none;
             }
 
-            .hero {
-                padding: 32px 24px;
-                border-radius: 16px;
+            .key-facts,
+            .metrics {
+                grid-template-columns: repeat(2, 1fr);
             }
 
-            .section {
-                padding: 30px 24px;
-                border-radius: 16px;
+            .card-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 600px) {
+            .hero-inner {
+                padding: 5rem 1.2rem 4rem;
             }
 
+            .paper {
+                padding-left: 1.2rem;
+                padding-right: 1.2rem;
+            }
+
+            .key-facts,
             .metrics {
                 grid-template-columns: 1fr;
             }
 
-            .toc {
-                top: 6px;
-            }
-        }
-
-        @media print {
-            body {
-                background: white;
+            .paper-section {
+                padding: 3rem 0;
             }
 
-            .page {
-                width: 100%;
-                padding: 0;
+            .abstract-box {
+                padding: 1.3rem;
             }
 
-            .hero,
-            .section {
-                box-shadow: none;
-                break-inside: avoid;
+            .recommendation {
+                grid-template-columns: 45px 1fr;
             }
 
-            .toc {
-                display: none;
+            .priority {
+                grid-column: 2;
+                width: fit-content;
             }
         }
     </style>
@@ -319,382 +571,1175 @@
 
 <body>
 
-<div class="page">
+    <!-- =========================================================
+         TOP NAVIGATION
+         ========================================================= -->
 
-    <!-- =========================================
-         HERO / PAPER TITLE
-    ========================================== -->
+    <header class="topbar">
 
-    <header class="hero">
+        <div class="topbar-inner">
 
-        <div class="eyebrow">
-            FlyRank ML Internship — Research Paper
+            <div class="brand">
+                FlyRank ML Research
+                <span>/ Capstone</span>
+            </div>
+
+            <nav>
+                <a href="#abstract">Abstract</a>
+                <a href="#introduction">Problem</a>
+                <a href="#data">Data</a>
+                <a href="#methodology">Methodology</a>
+                <a href="#results">Results</a>
+                <a href="#limitations">Limitations</a>
+                <a href="#recommendations">Recommendations</a>
+                <a href="#reproducibility">Reproducibility</a>
+            </nav>
+
         </div>
-
-        <h1>
-            Machine Learning for Prioritizing Declining
-            Keyword-Article Content for Human Review
-        </h1>
-
-        <p class="subtitle">
-            A decision-support approach for ranking keyword-article
-            content that shows signals associated with decline.
-        </p>
-
-        <p class="author">
-            Muhammad Noman Amir
-        </p>
-
-        <p class="affiliation">
-            FlyRank ML Internship
-        </p>
 
     </header>
 
 
-    <!-- =========================================
-         TABLE OF CONTENTS
-    ========================================== -->
+    <!-- =========================================================
+         HERO
+         ========================================================= -->
 
-    <nav class="toc" aria-label="Paper sections">
+    <section class="hero">
 
-        <a href="#abstract">Abstract</a>
+        <div class="hero-inner">
 
-        <a href="#introduction">Introduction</a>
+            <div class="eyebrow">
+                Machine Learning Research Artifact
+            </div>
 
-        <a href="#data">Data</a>
+            <h1>
+                Predicting Content Decline to Prioritize Human SEO Review
+            </h1>
 
-        <a href="#methodology">Methodology</a>
+            <p class="hero-description">
+                A machine-learning ranking approach for prioritizing
+                keyword-article content for human investigation using
+                historical search, engagement, content, and freshness signals.
+            </p>
 
-        <a href="#results">Results</a>
+            <div class="hero-meta">
+                <span class="tag">FlyRank ML Internship</span>
+                <span class="tag">Decision-support ranking</span>
+                <span class="tag">Keyword-article lane</span>
+                <span class="tag">Public-safe research artifact</span>
+            </div>
 
-        <a href="#limitations">Limitations</a>
-
-        <a href="#recommendations">Recommendations</a>
-
-        <a href="#reproducibility">Reproducibility</a>
-
-        <a href="#acknowledgments">Acknowledgments</a>
-
-    </nav>
-
-
-    <!-- =========================================
-         SECTION 1 — TITLE + ABSTRACT
-    ========================================== -->
-
-    <section class="section" id="abstract">
-
-        <div class="section-number">
-            Section 1
         </div>
 
-        <h2>
-            Abstract
-        </h2>
+    </section>
 
-        <div class="abstract-box">
+
+    <main class="paper">
+
+
+        <!-- =====================================================
+             SECTION 1 — TITLE + ABSTRACT
+             ===================================================== -->
+
+        <section id="abstract" class="paper-section">
+
+            <div class="section-label">
+                01 / Abstract
+            </div>
+
+            <h2>
+                Title + Abstract
+            </h2>
 
             <p class="lead">
-                This study investigates whether machine learning can help
-                prioritize keyword-article content that shows signals of
-                decline so that human reviewers can focus their attention
-                on the highest-priority cases.
+                Can machine learning help prioritize keyword-article
+                content that is likely to experience declining performance?
+            </p>
+
+            <div class="abstract-box">
+
+                <h3>
+                    Abstract
+                </h3>
+
+                <p>
+                    This study investigates whether historical content,
+                    search, engagement, and freshness signals can be used
+                    to prioritize keyword-article content for human review
+                    when an article is associated with declining performance.
+                </p>
+
+                <p>
+                    Using the FlyRank ML Internship dataset, the analysis
+                    focuses on 27,207 keyword-article rows from a larger
+                    30,000-row dataset and formulates the task as a binary
+                    classification and ranking problem.
+                </p>
+
+                <p>
+                    The methodology excludes identifiers and variables
+                    that would directly expose the target or observed trend,
+                    including <code>trend_direction</code>,
+                    <code>trend_pct</code>, <code>client_id</code>,
+                    <code>content_id</code>, and the target label itself.
+                    Validation uses client-grouped splits so validation
+                    clients do not overlap with training clients.
+                </p>
+
+                <p>
+                    The validated model achieves Precision@20 of
+                    <strong>0.9500</strong>, Precision@50 of
+                    <strong>0.9600</strong>, and Precision@100 of
+                    <strong>0.9600</strong>. It achieves ROC-AUC of
+                    <strong>0.6696</strong> and Average Precision of
+                    <strong>0.8568</strong>.
+                </p>
+
+                <p>
+                    These results support using the model as a
+                    decision-support ranking system for prioritizing
+                    human investigation. The score is not treated as
+                    causal evidence and does not independently justify
+                    rewriting, deleting, redirecting, or publishing content.
+                </p>
+
+            </div>
+
+            <div class="key-facts">
+
+                <div class="fact">
+                    <span class="fact-value">27,207</span>
+                    <span class="fact-label">
+                        Keyword-article rows
+                    </span>
+                </div>
+
+                <div class="fact">
+                    <span class="fact-value">30</span>
+                    <span class="fact-label">
+                        Final model features
+                    </span>
+                </div>
+
+                <div class="fact">
+                    <span class="fact-value">0.9600</span>
+                    <span class="fact-label">
+                        Precision@100
+                    </span>
+                </div>
+
+                <div class="fact">
+                    <span class="fact-value">0.8568</span>
+                    <span class="fact-label">
+                        Average Precision
+                    </span>
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- =====================================================
+             SECTION 2 — INTRODUCTION
+             ===================================================== -->
+
+        <section id="introduction" class="paper-section">
+
+            <div class="section-label">
+                02 / Introduction
+            </div>
+
+            <h2>
+                Introduction / Problem Statement
+            </h2>
+
+            <p>
+                Content teams often have more articles to review than
+                they can realistically investigate manually. A decline
+                in search or engagement performance may indicate that
+                an article deserves attention, but reviewing every
+                content item with equal priority is inefficient.
             </p>
 
             <p>
-                Using the anonymized FlyRank internship dataset, the analysis
-                frames decline detection as a binary classification and
-                ranking problem and evaluates a learned model using
-                client-grouped validation to reduce the risk of
-                client-specific leakage.
+                This project asks whether historical signals can be
+                transformed into a ranking score that helps a human
+                reviewer decide which keyword-article rows deserve
+                attention first.
+            </p>
+
+            <div class="callout">
+
+                <strong>
+                    Research question
+                </strong>
+
+                Can a machine-learning model rank keyword-article
+                content so that human reviewers encounter a high
+                proportion of declining items near the top of the queue?
+
+            </div>
+
+            <p>
+                The project is therefore framed as a
+                <strong>decision-support problem</strong>, rather than
+                an autonomous SEO optimization system.
+            </p>
+
+            <div class="card-grid">
+
+                <div class="card">
+
+                    <h3>
+                        Input
+                    </h3>
+
+                    <p>
+                        Historical content, search, traffic,
+                        engagement, freshness, and competition-related
+                        signals.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <h3>
+                        Output
+                    </h3>
+
+                    <p>
+                        A ranked queue of content candidates for
+                        human review.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- =====================================================
+             SECTION 3 — DATA
+             ===================================================== -->
+
+        <section id="data" class="paper-section">
+
+            <div class="section-label">
+                03 / Data
+            </div>
+
+            <h2>
+                Data
+            </h2>
+
+            <p>
+                The analysis uses the public-safe FlyRank ML Internship
+                dataset release available to the project. The raw
+                dataset contains 30,000 rows and 44 source columns.
             </p>
 
             <p>
-                On the held-out validation set of 2,789 rows from 5 clients,
-                the validated model achieved Precision@20 of 0.9500,
-                Precision@50 of 0.9600, Precision@100 of 0.9600,
-                ROC-AUC of 0.6696, and Average Precision of 0.8568.
+                The analysis focuses on the keyword-article lane,
+                containing 27,207 rows. Other content types were not
+                included in the final modeling lane because the
+                capstone task is specifically concerned with
+                keyword-article content prioritization.
+            </p>
+
+            <div class="table-wrapper">
+
+                <table>
+
+                    <thead>
+                        <tr>
+                            <th>Dataset property</th>
+                            <th>Value</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+
+                        <tr>
+                            <td>Raw dataset rows</td>
+                            <td>30,000</td>
+                        </tr>
+
+                        <tr>
+                            <td>Raw dataset columns</td>
+                            <td>44</td>
+                        </tr>
+
+                        <tr>
+                            <td>Keyword-article rows</td>
+                            <td>27,207</td>
+                        </tr>
+
+                        <tr>
+                            <td>Unique clients</td>
+                            <td>31</td>
+                        </tr>
+
+                        <tr>
+                            <td>Unique content items</td>
+                            <td>27,207</td>
+                        </tr>
+
+                        <tr>
+                            <td>Keyword-article decline rate</td>
+                            <td>56.10%</td>
+                        </tr>
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+            <h3>
+                Data categories
+            </h3>
+
+            <p>
+                The available variables cover several signal families,
+                including search demand, competition, content
+                characteristics, traffic, engagement, freshness,
+                position, and AI-related traffic indicators.
+            </p>
+
+            <h3>
+                Exclusions
+            </h3>
+
+            <ul>
+
+                <li>
+                    <code>trend_direction</code> was excluded because
+                    it directly describes the observed trend.
+                </li>
+
+                <li>
+                    <code>trend_pct</code> was excluded because it
+                    directly represents trend movement.
+                </li>
+
+                <li>
+                    <code>is_declining_label</code> was excluded from
+                    model features because it is the target.
+                </li>
+
+                <li>
+                    <code>client_id</code> was excluded from model
+                    features to prevent client identity from becoming
+                    a predictive shortcut.
+                </li>
+
+                <li>
+                    <code>content_id</code> was excluded because it is
+                    an identifier rather than a meaningful predictive
+                    signal.
+                </li>
+
+            </ul>
+
+            <div class="callout">
+
+                <strong>
+                    Public-safety approach
+                </strong>
+
+                The research artifact does not publish client names,
+                private URLs, private search queries, or other
+                identifying information.
+            </div>
+
+        </section>
+
+
+        <!-- =====================================================
+             SECTION 4 — METHODOLOGY
+             ===================================================== -->
+
+        <section id="methodology" class="paper-section">
+
+            <div class="section-label">
+                04 / Methodology
+            </div>
+
+            <h2>
+                Methodology
+            </h2>
+
+            <h3>
+                Task formulation
+            </h3>
+
+            <p>
+                The task is treated as binary classification followed
+                by ranking. The positive class represents content
+                associated with the observed declining outcome.
+            </p>
+
+            <div class="table-wrapper">
+
+                <table>
+
+                    <thead>
+                        <tr>
+                            <th>Component</th>
+                            <th>Definition</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+
+                        <tr>
+                            <td>Target</td>
+                            <td><code>is_declining_label</code></td>
+                        </tr>
+
+                        <tr>
+                            <td>Positive class</td>
+                            <td>1 = declining</td>
+                        </tr>
+
+                        <tr>
+                            <td>Negative class</td>
+                            <td>0 = not declining</td>
+                        </tr>
+
+                        <tr>
+                            <td>Use case</td>
+                            <td>Human-review prioritization</td>
+                        </tr>
+
+                        <tr>
+                            <td>Validation</td>
+                            <td>Client-grouped split</td>
+                        </tr>
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+            <h3>
+                Feature design
+            </h3>
+
+            <p>
+                The initial feature set contains numeric and categorical
+                variables derived from the available search, content,
+                traffic, engagement, and freshness signals. Target,
+                trend, and identifier variables are excluded before
+                model training.
+            </p>
+
+            <h3>
+                Leakage controls
+            </h3>
+
+            <ul>
+
+                <li>
+                    Target variable excluded from model features.
+                </li>
+
+                <li>
+                    Direct trend variables excluded.
+                </li>
+
+                <li>
+                    Client identity excluded from model features.
+                </li>
+
+                <li>
+                    Content identity excluded from model features.
+                </li>
+
+            </ul>
+
+            <h3>
+                Validation design
+            </h3>
+
+            <p>
+                Validation is performed at the client-group level.
+                This means clients assigned to validation are not
+                simultaneously present in the training group. The
+                purpose is to test whether the ranking signal can
+                generalize beyond the clients used for training.
+            </p>
+
+            <div class="architecture">
+
+                DATASET
+                    |
+                    v
+                Keyword-article lane
+                    |
+                    v
+                Feature preparation
+                    |
+                    +--------------------+
+                    |                    |
+                    v                    v
+                Training data       Validation data
+                grouped by client  grouped by client
+                    |                    |
+                    v                    v
+                Model training       Evaluation
+                    |                    |
+                    +---------+----------+
+                              |
+                              v
+                       Decline score
+                              |
+                              v
+                       Ranked queue
+                              |
+                              v
+                       Human review
+
+            </div>
+
+            <h3>
+                Interpretation principle
+            </h3>
+
+            <p>
+                The observed label is used for evaluation and ranking.
+                It is not interpreted as proof that any particular
+                feature caused the decline.
+            </p>
+
+        </section>
+
+
+        <!-- =====================================================
+             SECTION 5 — RESULTS
+             ===================================================== -->
+
+        <section id="results" class="paper-section">
+
+            <div class="section-label">
+                05 / Results
+            </div>
+
+            <h2>
+                Results: Model vs Baseline
+            </h2>
+
+            <p>
+                The validated model is evaluated using ranking-focused
+                metrics because the operational goal is to surface
+                useful candidates near the top of a human-review queue.
+            </p>
+
+            <div class="metrics">
+
+                <div class="metric">
+                    <strong>0.9500</strong>
+                    <span>Precision@20</span>
+                </div>
+
+                <div class="metric">
+                    <strong>0.9600</strong>
+                    <span>Precision@50</span>
+                </div>
+
+                <div class="metric">
+                    <strong>0.9600</strong>
+                    <span>Precision@100</span>
+                </div>
+
+                <div class="metric">
+                    <strong>0.6696</strong>
+                    <span>ROC-AUC</span>
+                </div>
+
+                <div class="metric">
+                    <strong>0.8568</strong>
+                    <span>Average Precision</span>
+                </div>
+
+            </div>
+
+            <div class="table-wrapper">
+
+                <table>
+
+                    <thead>
+                        <tr>
+                            <th>Metric</th>
+                            <th>Validated result</th>
+                            <th>Interpretation</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+
+                        <tr>
+                            <td>Precision@20</td>
+                            <td>0.9500</td>
+                            <td>95% of the top 20 were positive cases</td>
+                        </tr>
+
+                        <tr>
+                            <td>Precision@50</td>
+                            <td>0.9600</td>
+                            <td>96% of the top 50 were positive cases</td>
+                        </tr>
+
+                        <tr>
+                            <td>Precision@100</td>
+                            <td>0.9600</td>
+                            <td>96% of the top 100 were positive cases</td>
+                        </tr>
+
+                        <tr>
+                            <td>ROC-AUC</td>
+                            <td>0.6696</td>
+                            <td>Moderate overall discrimination</td>
+                        </tr>
+
+                        <tr>
+                            <td>Average Precision</td>
+                            <td>0.8568</td>
+                            <td>Strong ranking-oriented performance</td>
+                        </tr>
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+            <h3>
+                Validation population
+            </h3>
+
+            <p>
+                The validated evaluation set contains 2,789 rows from
+                five validation clients, with zero client overlap
+                between training and validation.
+            </p>
+
+            <div class="callout warning">
+
+                <strong>
+                    Important interpretation
+                </strong>
+
+                High top-k precision does not mean that the model
+                perfectly predicts decline for every content item.
+                ROC-AUC is materially lower than the top-k precision,
+                showing that the strongest practical value is in
+                prioritization near the top of the queue rather than
+                perfect global classification.
+            </div>
+
+        </section>
+
+
+        <!-- =====================================================
+             SECTION 6 — LIMITATIONS
+             ===================================================== -->
+
+        <section id="limitations" class="paper-section">
+
+            <div class="section-label">
+                06 / Limitations
+            </div>
+
+            <h2>
+                Limitations & Honest Framing
+            </h2>
+
+            <p>
+                The results should be interpreted as evidence that the
+                model can support prioritization under the evaluated
+                validation design. They should not be interpreted as
+                proof of causality or as a fully autonomous SEO system.
+            </p>
+
+            <h3>
+                Key limitations
+            </h3>
+
+            <ol>
+
+                <li>
+                    The evaluation is based on the available dataset
+                    release and may not represent every possible
+                    content or client environment.
+                </li>
+
+                <li>
+                    The observed decline label describes an outcome;
+                    it does not explain why the decline happened.
+                </li>
+
+                <li>
+                    The ROC-AUC result of 0.6696 indicates that global
+                    discrimination is substantially less perfect than
+                    the very strong top-k precision results.
+                </li>
+
+                <li>
+                    Search behavior, seasonality, competitor changes,
+                    algorithm updates, and external events may affect
+                    content performance.
+                </li>
+
+                <li>
+                    Model performance may change when future client,
+                    content, or feature distributions differ materially
+                    from the validation population.
+                </li>
+
+                <li>
+                    Human review remains necessary before making
+                    content or SEO changes.
+                </li>
+
+            </ol>
+
+            <div class="callout warning">
+
+                <strong>
+                    No autonomous publishing
+                </strong>
+
+                The model should not automatically rewrite, delete,
+                redirect, publish, change search intent, modify SEO
+                metadata, or make business-critical decisions.
+            </div>
+
+            <p>
+                A high score should be interpreted as
+                <strong>"review this item earlier"</strong>, not
+                <strong>"change this item automatically."</strong>
+            </p>
+
+        </section>
+
+
+        <!-- =====================================================
+             SECTION 7 — RANKED RECOMMENDATIONS
+             ===================================================== -->
+
+        <section id="recommendations" class="paper-section">
+
+            <div class="section-label">
+                07 / Recommendations
+            </div>
+
+            <h2>
+                Ranked Recommendations
+            </h2>
+
+            <p>
+                The model output is converted into an action-oriented
+                review queue. The following playbook describes how a
+                human reviewer should use the ranking.
+            </p>
+
+            <div class="card">
+
+                <div class="recommendation">
+
+                    <div class="rank">1</div>
+
+                    <div>
+                        <h3>
+                            Review the highest-ranked candidates first
+                        </h3>
+
+                        <p>
+                            Start with the top-ranked rows because the
+                            validated top-k precision indicates that
+                            the highest-ranked portion of the queue is
+                            enriched for declining cases.
+                        </p>
+                    </div>
+
+                    <span class="priority">
+                        HIGH
+                    </span>
+
+                </div>
+
+                <div class="recommendation">
+
+                    <div class="rank">2</div>
+
+                    <div>
+                        <h3>
+                            Verify the observed trend
+                        </h3>
+
+                        <p>
+                            Check whether the available recent
+                            performance data supports the model signal
+                            before taking any action.
+                        </p>
+                    </div>
+
+                    <span class="priority">
+                        HIGH
+                    </span>
+
+                </div>
+
+                <div class="recommendation">
+
+                    <div class="rank">3</div>
+
+                    <div>
+                        <h3>
+                            Check search intent and SERP context
+                        </h3>
+
+                        <p>
+                            Determine whether the underlying query
+                            intent or search-result landscape has
+                            changed.
+                        </p>
+                    </div>
+
+                    <span class="priority">
+                        HIGH
+                    </span>
+
+                </div>
+
+                <div class="recommendation">
+
+                    <div class="rank">4</div>
+
+                    <div>
+                        <h3>
+                            Review freshness and information gaps
+                        </h3>
+
+                        <p>
+                            Investigate whether the content has become
+                            outdated, incomplete, or less useful than
+                            competing resources.
+                        </p>
+                    </div>
+
+                    <span class="priority">
+                        MEDIUM
+                    </span>
+
+                </div>
+
+                <div class="recommendation">
+
+                    <div class="rank">5</div>
+
+                    <div>
+                        <h3>
+                            Check external explanations
+                        </h3>
+
+                        <p>
+                            Consider seasonality, major search changes,
+                            competitor movements, and other external
+                            explanations before modifying content.
+                        </p>
+                    </div>
+
+                    <span class="priority">
+                        MEDIUM
+                    </span>
+
+                </div>
+
+                <div class="recommendation">
+
+                    <div class="rank">6</div>
+
+                    <div>
+                        <h3>
+                            Confirm that useful content will not be removed
+                        </h3>
+
+                        <p>
+                            Any intervention should preserve valuable
+                            information and avoid treating the model
+                            score as sufficient justification by itself.
+                        </p>
+                    </div>
+
+                    <span class="priority">
+                        REQUIRED
+                    </span>
+
+                </div>
+
+            </div>
+
+            <div class="callout">
+
+                <strong>
+                    Decision workflow
+                </strong>
+
+                Model ranking → Human inspection → Contextual checks
+                → Decision → Manual action
+            </div>
+
+        </section>
+
+
+        <!-- =====================================================
+             SECTION 8 — REPRODUCIBILITY
+             ===================================================== -->
+
+        <section id="reproducibility" class="paper-section">
+
+            <div class="section-label">
+                08 / Reproducibility
+            </div>
+
+            <h2>
+                Reproducibility
+            </h2>
+
+            <p>
+                The analysis was developed in the FlyRank ML Internship
+                repository and executed through Google Colab during the
+                internship workflow.
+            </p>
+
+            <div class="card-grid">
+
+                <div class="card">
+
+                    <h3>
+                        Repository
+                    </h3>
+
+                    <p>
+                        Source notebooks, project artifacts, and
+                        supporting files are maintained in the project
+                        repository.
+                    </p>
+
+                    <p>
+                        <a
+                            href="https://github.com/nomanamir20/flyrank-ml-internship"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                        >
+                            View the GitHub repository →
+                        </a>
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <h3>
+                        Capstone notebook
+                    </h3>
+
+                    <p>
+                        The capstone notebook contains the analysis
+                        pipeline corresponding to the research-paper
+                        sections.
+                    </p>
+
+                    <p>
+                        <code>work/notebooks/capstone.ipynb</code>
+                    </p>
+
+                </div>
+
+            </div>
+
+            <h3>
+                Reproduction flow
+            </h3>
+
+            <ol>
+
+                <li>
+                    Clone or open the repository.
+                </li>
+
+                <li>
+                    Open the capstone notebook in Google Colab or
+                    another compatible Jupyter environment.
+                </li>
+
+                <li>
+                    Load the provided dataset from the repository.
+                </li>
+
+                <li>
+                    Execute the notebook sections in order.
+                </li>
+
+                <li>
+                    Inspect the generated validation results,
+                    recommendations, and artifacts.
+                </li>
+
+            </ol>
+
+            <div class="callout warning">
+
+                <strong>
+                    Data availability
+                </strong>
+
+                Reproduction depends on access to the corresponding
+                FlyRank ML Internship dataset release. The public
+                research page does not expose private client-level
+                information.
+            </div>
+
+        </section>
+
+
+        <!-- =====================================================
+             SECTION 9 — ACKNOWLEDGMENTS
+             ===================================================== -->
+
+        <section id="acknowledgments" class="paper-section">
+
+            <div class="section-label">
+                09 / Credits
+            </div>
+
+            <h2>
+                Acknowledgments & Data Credit
+            </h2>
+
+            <p>
+                This research artifact was developed as part of the
+                FlyRank ML Internship track.
             </p>
 
             <p>
-                The resulting scores are used to create a ranked review
-                queue and action playbook rather than to automatically
-                rewrite, delete, redirect, or publish content.
+                The analysis is built on the
+                <strong>FlyRank ML Internship dataset</strong>,
+                which provided the search, content, traffic,
+                engagement, and related signals used in the study.
+            </p>
+
+            <div class="callout">
+
+                <strong>
+                    Data credit
+                </strong>
+
+                Built on the FlyRank ML Internship dataset.
+                Data source:
+                <a
+                    href="https://flyrank.ai"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                >
+                    FlyRank
+                </a>.
+            </div>
+
+            <h3>
+                AI transparency
+            </h3>
+
+            <p>
+                AI tools were used as development and reasoning
+                assistants during the project, including for
+                debugging, code refinement, documentation, and
+                research-paper preparation. The resulting analysis,
+                validation decisions, interpretation, and final
+                claims were reviewed by the author.
             </p>
 
             <p>
-                The results support the use of the model as a decision-support
-                signal for human review, while the model's limitations,
-                validation scope, and non-causal interpretation require
-                contextual inspection before any content decision is made.
+                The purpose of this disclosure is to distinguish
+                assistance from independent verification and to make
+                the development process transparent.
             </p>
 
-        </div>
+        </section>
 
 
-        <!-- Key validated results -->
+        <!-- =====================================================
+             FINAL RESEARCH NOTE
+             ===================================================== -->
 
-        <h3>
-            Validated headline results
-        </h3>
+        <section class="paper-section">
 
-        <div class="metrics">
-
-            <div class="metric">
-
-                <div class="metric-label">
-                    Precision@20
-                </div>
-
-                <div class="metric-value">
-                    0.9500
-                </div>
-
+            <div class="section-label">
+                Final note
             </div>
 
+            <h2>
+                From prediction to responsible review
+            </h2>
 
-            <div class="metric">
+            <p>
+                The central output of this project is not an automated
+                content-change system. It is a ranked decision-support
+                queue that helps a reviewer decide where to spend
+                attention first.
+            </p>
 
-                <div class="metric-label">
-                    Precision@50
-                </div>
+            <p>
+                The strongest evidence is concentrated in the top of
+                the ranking, while the broader discrimination metrics
+                show that the model should not be treated as infallible.
+                The appropriate workflow therefore combines machine
+                ranking with human investigation and contextual judgment.
+            </p>
 
-                <div class="metric-value">
-                    0.9600
-                </div>
+            <div class="callout">
 
+                <strong>
+                    Responsible-use principle
+                </strong>
+
+                Use the model to decide what to investigate first,
+                not what to change automatically.
             </div>
 
+        </section>
 
-            <div class="metric">
 
-                <div class="metric-label">
-                    Precision@100
-                </div>
+    </main>
 
-                <div class="metric-value">
-                    0.9600
-                </div>
 
-            </div>
-
-        </div>
-
-
-        <div class="metrics">
-
-            <div class="metric">
-
-                <div class="metric-label">
-                    ROC-AUC
-                </div>
-
-                <div class="metric-value">
-                    0.6696
-                </div>
-
-            </div>
-
-
-            <div class="metric">
-
-                <div class="metric-label">
-                    Average Precision
-                </div>
-
-                <div class="metric-value">
-                    0.8568
-                </div>
-
-            </div>
-
-
-            <div class="metric">
-
-                <div class="metric-label">
-                    Validation Rows
-                </div>
-
-                <div class="metric-value">
-                    2,789
-                </div>
-
-            </div>
-
-        </div>
-
-
-        <p>
-            Validation was performed using five held-out clients with
-            zero client overlap between the training and validation
-            groups. The resulting ranking is intended to support
-            human review rather than replace editorial or SEO judgment.
-        </p>
-
-    </section>
-
-
-    <!-- =========================================
-         PLACEHOLDER SECTIONS
-         We will replace these one by one.
-    ========================================== -->
-
-    <section class="section" id="introduction">
-
-        <div class="section-number">
-            Section 2
-        </div>
-
-        <h2>
-            Introduction / Problem Statement
-        </h2>
-
-        <p>
-            This section will be completed next.
-        </p>
-
-    </section>
-
-
-    <section class="section" id="data">
-
-        <div class="section-number">
-            Section 3
-        </div>
-
-        <h2>
-            Data
-        </h2>
-
-        <p>
-            This section will be completed next.
-        </p>
-
-    </section>
-
-
-    <section class="section" id="methodology">
-
-        <div class="section-number">
-            Section 4
-        </div>
-
-        <h2>
-            Methodology
-        </h2>
-
-        <p>
-            This section will be completed next.
-        </p>
-
-    </section>
-
-
-    <section class="section" id="results">
-
-        <div class="section-number">
-            Section 5
-        </div>
-
-        <h2>
-            Results
-        </h2>
-
-        <p>
-            This section will be completed next using the results
-            generated in the capstone notebook.
-        </p>
-
-    </section>
-
-
-    <section class="section" id="limitations">
-
-        <div class="section-number">
-            Section 6
-        </div>
-
-        <h2>
-            Limitations & Honest Framing
-        </h2>
-
-        <p>
-            This section will be completed next.
-        </p>
-
-    </section>
-
-
-    <section class="section" id="recommendations">
-
-        <div class="section-number">
-            Section 7
-        </div>
-
-        <h2>
-            Ranked Recommendations
-        </h2>
-
-        <p>
-            This section will be completed next.
-        </p>
-
-    </section>
-
-
-    <section class="section" id="reproducibility">
-
-        <div class="section-number">
-            Section 8
-        </div>
-
-        <h2>
-            Reproducibility
-        </h2>
-
-        <p>
-            This section will be completed next.
-        </p>
-
-    </section>
-
-
-    <section class="section" id="acknowledgments">
-
-        <div class="section-number">
-            Section 9
-        </div>
-
-        <h2>
-            Acknowledgments & Data Credit
-        </h2>
-
-        <p>
-            This section will be completed next.
-        </p>
-
-    </section>
-
-
-    <!-- =========================================
+    <!-- =========================================================
          FOOTER
-    ========================================== -->
+         ========================================================= -->
 
     <footer>
 
-        <p>
-            Machine Learning for Prioritizing Declining
-            Keyword-Article Content for Human Review
-        </p>
+        <div class="footer-inner">
 
-        <p>
-            Muhammad Noman Amir · FlyRank ML Internship
-        </p>
+            <p>
+                Machine-learning research artifact developed during
+                the FlyRank ML Internship.
+            </p>
+
+            <p class="footer-credit">
+                Built on the FlyRank ML Internship dataset.
+            </p>
+
+        </div>
 
     </footer>
 
-</div>
 
 </body>
 </html>
