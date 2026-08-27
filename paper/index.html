@@ -371,20 +371,23 @@
             <h2>Five-sentence summary</h2>
 
             <p>
-                This study asks whether machine-learning signals can help prioritise
-                keyword-article content associated with observed performance decline.
-                The analysis uses an anonymized FlyRank dataset, filters the selected
-                keyword-article lane, defines a binary declining-content label, and
-                evaluates a model against a simple baseline using client-grouped
-                validation. The modelling pipeline excludes identifiers and observed
-                trend variables that could introduce leakage and treats the resulting
-                score as a prioritisation signal rather than causal evidence. The
-                resulting model and baseline are compared on the same validation
-                design, with the model's predictions converted into a ranked review
-                queue. The final output is therefore a human-review prioritisation
-                system: it identifies content that resembles previously observed
-                decline patterns, while making no guarantee that a recommended
-                intervention will improve future SEO performance.
+                FlyRank content teams may need to review large numbers of keyword-article
+                pages when search and engagement performance changes, creating a practical
+                prioritisation problem: which content should be investigated first?
+                This case study uses anonymized FlyRank internship data to examine whether
+                observable content, search, engagement, freshness, and related signals can
+                be used to prioritise keyword-article items associated with an observed
+                decline outcome.
+                The analysis focuses on 27,207 keyword-article observations and evaluates a
+                machine-learning model using client-grouped validation, with trend-derived
+                variables and identifiers excluded from the feature set to reduce leakage.
+                The validated model achieved a ROC-AUC of 0.8764 and Average Precision of
+                0.9034, while Precision@20, Precision@50, and Precision@100 were each 1.0000;
+                however, the evaluation baseline also achieved 1.0000 on these ranking
+                measures and achieved ROC-AUC and Average Precision of 1.0000.
+                The practical outcome is therefore framed as a human-review prioritisation
+                system rather than proof of causal drivers or evidence that acting on a
+                recommendation will improve SEO performance.
             </p>
         </section>
 
@@ -397,32 +400,84 @@
             <h2>Problem Statement</h2>
 
             <p>
-                Content teams often have more pages to review than they can
-                investigate manually. When search visibility or engagement declines,
-                the challenge is not simply detecting that decline has occurred; it
-                is deciding which content should receive attention first.
+                The practical content problem behind this case study comes from a common
+                challenge in SEO and content operations: a team may have a large portfolio
+                of published pages, but limited time to investigate every page when search
+                performance begins to decline. In the FlyRank internship dataset, this
+                problem can be studied through keyword-article content items and their
+                observed performance signals.
             </p>
 
             <p>
-                This research explores a machine-learning approach to that
-                prioritisation problem. Instead of automatically modifying content,
-                the system produces a ranked queue that can help a human reviewer
-                decide where investigation may be most valuable.
+                Rather than asking a human reviewer to inspect all available content with
+                equal priority, this research investigates whether machine-learning signals
+                can help produce an ordered queue of content items that deserve attention
+                first. The objective is therefore operational: use available historical
+                signals to support the identification and prioritisation of potentially
+                declining keyword-article content.
             </p>
 
             <div class="callout">
-                <strong>Research question:</strong>
+                <strong>FlyRank case-study question:</strong>
                 Can observable content, search, engagement, freshness, and related
                 performance features be used to prioritise keyword-article items that
-                resemble patterns associated with observed decline?
+                resemble patterns associated with observed performance decline?
             </div>
 
+            <h3>Why this matters for content operations</h3>
+
             <p>
-                The distinction between <strong>prediction</strong> and
-                <strong>explanation</strong> is central to this work. A model score
-                indicates similarity to patterns learned from the available data.
-                It does not establish that a particular feature caused the decline.
+                A content team does not necessarily need an automated system that changes
+                pages without review. A more conservative and practical use of machine
+                learning is to reduce the initial search space: instead of reviewing
+                thousands of content items in an arbitrary order, reviewers can begin with
+                items that receive stronger model-based decline scores.
             </p>
+
+            <p>
+                This approach connects the modelling task directly to the FlyRank content
+                workflow. The output is not intended to be an automatic rewrite engine,
+                deletion system, or guaranteed SEO optimisation mechanism. It is a
+                prioritisation layer that can help a human reviewer decide where further
+                investigation may be worthwhile.
+            </p>
+
+            <h3>What the evaluation showed</h3>
+
+            <p>
+                On the defined validation design, the model produced a ROC-AUC of
+                <strong>0.8764</strong> and an Average Precision of
+                <strong>0.9034</strong>. It also achieved perfect Precision@20,
+                Precision@50, and Precision@100 on the evaluated ranking task.
+                However, the baseline achieved the same perfect precision values and also
+                produced ROC-AUC and Average Precision values of
+                <strong>1.0000</strong>. Consequently, the results should not be presented
+                as evidence that the model outperformed the baseline.
+            </p>
+
+            <p>
+                Instead, the findings demonstrate how a machine-learning scoring pipeline
+                can be constructed around the FlyRank content-prioritisation problem while
+                maintaining explicit leakage controls, grouped validation, ranked outputs,
+                and an honest distinction between prediction and explanation.
+            </p>
+
+            <h3>Prediction is not explanation</h3>
+
+            <p>
+                A model score indicates how strongly an item resembles patterns associated
+                with the observed declining class in the available data. It does not
+                establish why a particular page declined, identify a causal factor, or
+                guarantee that changing the page will improve rankings, traffic, engagement,
+                or conversions.
+            </p>
+
+            <div class="callout">
+                <strong>Case-study framing:</strong>
+                The FlyRank problem is treated as a content-review prioritisation problem.
+                The machine-learning system helps answer <em>“what should we investigate
+                first?”</em> rather than <em>“what should we automatically change?”</em>.
+            </div>
         </section>
 
         <!-- ================================================= -->
@@ -480,17 +535,20 @@
                         <th>Keyword-article observations</th>
                     </tr>
                 </thead>
+
                 <tbody>
                     <tr>
                         <td>0</td>
                         <td>Not declining</td>
                         <td>11,945</td>
                     </tr>
+
                     <tr>
                         <td>1</td>
                         <td>Declining</td>
                         <td>15,262</td>
                     </tr>
+
                     <tr>
                         <td colspan="2"><strong>Total</strong></td>
                         <td><strong>27,207</strong></td>
@@ -520,26 +578,44 @@
                         <th>Reason for exclusion</th>
                     </tr>
                 </thead>
+
                 <tbody>
                     <tr>
                         <td><code>trend_direction</code></td>
-                        <td>Directly related to the observed decline outcome; excluded to reduce leakage.</td>
+                        <td>
+                            Directly related to the observed decline outcome;
+                            excluded to reduce leakage.
+                        </td>
                     </tr>
+
                     <tr>
                         <td><code>trend_pct</code></td>
-                        <td>Directly related to observed trend behaviour; excluded from model features.</td>
+                        <td>
+                            Directly related to observed trend behaviour;
+                            excluded from model features.
+                        </td>
                     </tr>
+
                     <tr>
                         <td><code>is_declining_label</code></td>
-                        <td>Target variable; never used as an input feature.</td>
+                        <td>
+                            Target variable; never used as an input feature.
+                        </td>
                     </tr>
+
                     <tr>
                         <td><code>client_id</code></td>
-                        <td>Identifier retained only for grouped validation.</td>
+                        <td>
+                            Identifier retained only for grouped validation.
+                        </td>
                     </tr>
+
                     <tr>
                         <td><code>content_id</code></td>
-                        <td>Identifier retained for content-level identification, not modelling.</td>
+                        <td>
+                            Identifier retained for content-level identification,
+                            not modelling.
+                        </td>
                     </tr>
                 </tbody>
             </table>
@@ -579,21 +655,26 @@
                 <li>
                     The task is treated as binary classification and ranking.
                 </li>
+
                 <li>
                     The model is used for decision-support and human review,
                     not automatic content changes.
                 </li>
+
                 <li>
                     Rows represent keyword-article content items in the selected
                     analysis lane.
                 </li>
+
                 <li>
                     Client IDs are used for grouped validation only and are not
                     model features.
                 </li>
+
                 <li>
                     Content IDs are identifiers only and are not model features.
                 </li>
+
                 <li>
                     The observed label is treated as an evaluation outcome,
                     not as a causal explanation.
@@ -669,199 +750,123 @@
             <h2>Model vs Baseline</h2>
 
             <p>
-                The model is evaluated against a baseline on the same validation
-                design. The purpose of this comparison is to determine whether the
-                model provides useful prioritisation performance beyond a simple
-                reference strategy.
+                The model was evaluated against a baseline using the defined
+                validation design. The comparison is intended to assess whether
+                the machine-learning scoring approach provides useful ranking and
+                classification performance for the content-prioritisation problem.
             </p>
 
-          <!-- ================================================= -->
-<!-- RESULTS -->
-<!-- ================================================= -->
+            <div class="metric-grid">
+                <div class="metric">
+                    <strong>0.8764</strong>
+                    <span>Model ROC-AUC</span>
+                </div>
 
-<section id="results">
-    <div class="section-number">04 · Results</div>
-    <h2>Model vs Baseline</h2>
+                <div class="metric">
+                    <strong>0.9034</strong>
+                    <span>Model Average Precision</span>
+                </div>
 
-    <p>
-        The model was evaluated against a baseline using the same validation
-        framework. The evaluation focuses on ranking quality and classification
-        performance, with particular attention to Precision@20, Precision@50,
-        Precision@100, ROC-AUC, and Average Precision.
-    </p>
+                <div class="metric">
+                    <strong>1.0000</strong>
+                    <span>Model Precision@20</span>
+                </div>
 
-    <div class="metric-grid">
-        <div class="metric">
-            <strong>1.0000</strong>
-            <span>Model Precision@20</span>
-        </div>
+                <div class="metric">
+                    <strong>1.0000</strong>
+                    <span>Model Precision@100</span>
+                </div>
+            </div>
 
-        <div class="metric">
-            <strong>1.0000</strong>
-            <span>Model Precision@50</span>
-        </div>
+            <h3>Validated evaluation metrics</h3>
 
-        <div class="metric">
-            <strong>1.0000</strong>
-            <span>Model Precision@100</span>
-        </div>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Metric</th>
+                        <th>Baseline</th>
+                        <th>Model</th>
+                    </tr>
+                </thead>
 
-        <div class="metric">
-            <strong>0.8764</strong>
-            <span>Model ROC-AUC</span>
-        </div>
-    </div>
+                <tbody>
+                    <tr>
+                        <td>Precision@20</td>
+                        <td>1.0000</td>
+                        <td>1.0000</td>
+                    </tr>
 
-    <h3>Validation results</h3>
+                    <tr>
+                        <td>Precision@50</td>
+                        <td>1.0000</td>
+                        <td>1.0000</td>
+                    </tr>
 
-    <table>
-        <thead>
-            <tr>
-                <th>Metric</th>
-                <th>Baseline</th>
-                <th>Model</th>
-            </tr>
-        </thead>
+                    <tr>
+                        <td>Precision@100</td>
+                        <td>1.0000</td>
+                        <td>1.0000</td>
+                    </tr>
 
-        <tbody>
-            <tr>
-                <td>Precision@20</td>
-                <td>1.0000</td>
-                <td>1.0000</td>
-            </tr>
+                    <tr>
+                        <td>ROC-AUC</td>
+                        <td>1.0000</td>
+                        <td>0.8764</td>
+                    </tr>
 
-            <tr>
-                <td>Precision@50</td>
-                <td>1.0000</td>
-                <td>1.0000</td>
-            </tr>
-
-            <tr>
-                <td>Precision@100</td>
-                <td>1.0000</td>
-                <td>1.0000</td>
-            </tr>
-
-            <tr>
-                <td>ROC-AUC</td>
-                <td>1.0000</td>
-                <td>0.8764</td>
-            </tr>
-
-            <tr>
-                <td>Average Precision</td>
-                <td>1.0000</td>
-                <td>0.9034</td>
-            </tr>
-        </tbody>
-    </table>
-
-    <h3>Ranking performance</h3>
-
-    <p>
-        The model achieved a Precision@20, Precision@50, and Precision@100
-        of <strong>1.0000</strong>. This means that all evaluated top-20,
-        top-50, and top-100 positions in the generated ranking corresponded
-        to the positive class under the notebook's evaluation definition.
-    </p>
-
-    <p>
-        The model achieved a ROC-AUC of <strong>0.8764</strong> and an
-        Average Precision of <strong>0.9034</strong>. These values indicate
-        that the model provides meaningful separation and ranking performance
-        within the evaluated data and validation design.
-    </p>
-
-    <h3>Comparison with baseline</h3>
-
-    <p>
-        The baseline achieved the same perfect Precision@20, Precision@50,
-        and Precision@100 values as the model. However, the baseline also
-        produced a ROC-AUC of <strong>1.0000</strong> and an Average Precision
-        of <strong>1.0000</strong>, both higher than the corresponding model
-        values of 0.8764 and 0.9034.
-    </p>
-
-    <div class="callout">
-        <strong>Result interpretation:</strong>
-        Based on the executed Section 4 metrics, the model does not outperform
-        the baseline on ROC-AUC or Average Precision. Both approaches achieve
-        perfect Precision@20, Precision@50, and Precision@100 under the
-        reported evaluation. Therefore, the results should be reported
-        descriptively rather than claiming that the machine-learning model
-        improves upon the baseline.
-    </div>
-
-    <h3>Why the results matter</h3>
-
-    <p>
-        The evaluation demonstrates that the model can produce a highly
-        concentrated ranking of observed declining items at the evaluated
-        top-k positions. At the same time, the comparison shows that strong
-        top-k precision does not necessarily imply superior overall ranking
-        performance. ROC-AUC and Average Precision provide additional
-        information about how well scores separate and rank the two classes
-        across the evaluated population.
-    </p>
-
-    <h3>Model score distribution</h3>
-
-    <p>
-        The notebook also generated model score values for the evaluated
-        content items. These scores are used to construct the ranked
-        prioritisation queue described in the recommendations section.
-    </p>
-
-    <div class="callout">
-        <strong>Claim boundary:</strong>
-        The reported metrics describe performance under the executed
-        validation procedure. They do not establish causation, prove that
-        the model is superior to the baseline, or guarantee that acting on
-        a high-ranked recommendation will improve SEO performance.
-    </div>
-
-    <h3>Evaluation artifact</h3>
-
-    <p>
-        The Section 4 execution saved the variables required for subsequent
-        analysis to:
-    </p>
-
-    <p>
-        <code>work/outputs/section4_vars.pkl</code>
-    </p>
-
-    <p class="small">
-        The metrics above are reproduced from the executed Section 4 notebook
-        output and are not estimated values.
-    </p>
-</section>
+                    <tr>
+                        <td>Average Precision</td>
+                        <td>1.0000</td>
+                        <td>0.9034</td>
+                    </tr>
+                </tbody>
+            </table>
 
             <h3>Interpretation</h3>
 
             <p>
-                The results should be interpreted as evidence about performance
-                within the defined validation design, not as a guarantee of future
-                SEO outcomes. The model's primary practical value is its ability to
-                produce an ordered review queue from the available signals.
+                The model achieved perfect Precision@20, Precision@50, and
+                Precision@100 on the evaluated ranking task. However, the baseline
+                also achieved perfect precision at all three cutoffs. The baseline
+                additionally achieved ROC-AUC and Average Precision of 1.0000,
+                compared with 0.8764 and 0.9034 for the model respectively.
+            </p>
+
+            <p>
+                Therefore, the results do not support a claim that the machine-learning
+                model outperformed the baseline. Instead, they provide an honest
+                evaluation of the model's ability to generate a useful prioritisation
+                score under the defined validation setup.
             </p>
 
             <div class="callout">
-                <strong>Claim boundary:</strong>
-                The results support evaluating whether the model can prioritise
-                observed decline patterns. They do not establish causation or prove
-                that acting on a recommendation will improve rankings or traffic.
+                <strong>Key finding:</strong>
+                The model successfully produced high-priority ranking outputs, but
+                the selected baseline performed equally well or better on the reported
+                evaluation metrics. The value of the model should therefore be assessed
+                as a decision-support and prioritisation experiment rather than as a
+                demonstrated improvement over the baseline.
             </div>
+
+            <h3>Ranking interpretation</h3>
+
+            <p>
+                The perfect Precision@20, Precision@50, and Precision@100 values
+                indicate that the highest-ranked items in the evaluated output
+                corresponded to the positive declining class within the validation
+                results. These ranking results are useful for understanding the
+                prioritisation behaviour, but they should not be interpreted as
+                evidence that the model identifies causal reasons for decline.
+            </p>
 
             <h3>Charts</h3>
 
             <p>
-                The final paper should embed the charts generated during the Section
-                4 evaluation. These should show the model and baseline using the
-                same validation split and the same evaluation definitions.
+                The Section 4 evaluation artifacts generated during the notebook
+                workflow provide the underlying metric results used for this paper.
+                Any published visualisation should preserve the same metric
+                definitions and validation design.
             </p>
-
-           
         </section>
 
         <!-- ================================================= -->
@@ -880,7 +885,10 @@
 
             <div class="recommendation">
                 <span class="recommendation-number">1</span>
-                <strong>Prioritise high-decline-score content for review</strong>
+
+                <strong>
+                    Prioritise high-decline-score content for review
+                </strong>
 
                 <p>
                     Begin with content receiving the highest model scores because
@@ -891,7 +899,10 @@
 
             <div class="recommendation">
                 <span class="recommendation-number">2</span>
-                <strong>Investigate recent performance and freshness signals</strong>
+
+                <strong>
+                    Investigate recent performance and freshness signals
+                </strong>
 
                 <p>
                     Review recent impressions, clicks, sessions, content age,
@@ -902,7 +913,10 @@
 
             <div class="recommendation">
                 <span class="recommendation-number">3</span>
-                <strong>Use model recommendations as a review queue, not an automatic action</strong>
+
+                <strong>
+                    Use model recommendations as a review queue, not an automatic action
+                </strong>
 
                 <p>
                     A high score should trigger investigation rather than an
@@ -912,7 +926,10 @@
 
             <div class="recommendation">
                 <span class="recommendation-number">4</span>
-                <strong>Validate the recommendation against the content itself</strong>
+
+                <strong>
+                    Validate the recommendation against the content itself
+                </strong>
 
                 <p>
                     Human reviewers should inspect the actual page, its search
@@ -923,7 +940,10 @@
 
             <div class="recommendation">
                 <span class="recommendation-number">5</span>
-                <strong>Monitor outcomes after interventions</strong>
+
+                <strong>
+                    Monitor outcomes after interventions
+                </strong>
 
                 <p>
                     Where a content intervention is made, its future performance
@@ -982,22 +1002,30 @@
 
             <ul>
                 <li>
-                    <code>work/outputs/section6_ranked_recommendations.csv</code>
+                    <code>
+                        work/outputs/section6_ranked_recommendations.csv
+                    </code>
                     — ranked recommendation queue.
                 </li>
 
                 <li>
-                    <code>work/outputs/section8_limitations.csv</code>
+                    <code>
+                        work/outputs/section8_limitations.csv
+                    </code>
                     — documented limitations and honest-framing statements.
                 </li>
 
                 <li>
-                    <code>work/outputs/paper_artifact_index.csv</code>
+                    <code>
+                        work/outputs/paper_artifact_index.csv
+                    </code>
                     — artifact verification/index generated during the capstone.
                 </li>
 
                 <li>
-                    <code>data/raw/content_refresh_anonymized.csv</code>
+                    <code>
+                        data/raw/content_refresh_anonymized.csv
+                    </code>
                     — anonymized raw dataset used by the analysis.
                 </li>
             </ul>
@@ -1006,7 +1034,7 @@
 
             <p>
                 The capstone artifact check successfully verified all three required
-                core artifacts:
+                core artifacts.
             </p>
 
             <table>
@@ -1016,15 +1044,18 @@
                         <th>Status</th>
                     </tr>
                 </thead>
+
                 <tbody>
                     <tr>
                         <td>Capstone notebook</td>
                         <td>Found</td>
                     </tr>
+
                     <tr>
                         <td>Section 6 ranked recommendations</td>
                         <td>Found</td>
                     </tr>
+
                     <tr>
                         <td>Raw dataset</td>
                         <td>Found</td>
@@ -1196,6 +1227,7 @@
 
 <footer>
     <div class="footer-inner">
+
         <p>
             <strong>FlyRank ML Internship Research Artifact</strong>
         </p>
@@ -1215,6 +1247,7 @@
                 FlyRank ML Internship dataset
             </a>.
         </p>
+
     </div>
 </footer>
 
