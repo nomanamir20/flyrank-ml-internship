@@ -681,42 +681,167 @@
                 or invent these values.
             </div>
 
-            <table>
-                <thead>
-                    <tr>
-                        <th>Metric</th>
-                        <th>Baseline</th>
-                        <th>Model</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>Accuracy</td>
-                        <td>REPLACE_WITH_SECTION_4_VALUE</td>
-                        <td>REPLACE_WITH_SECTION_4_VALUE</td>
-                    </tr>
-                    <tr>
-                        <td>Precision</td>
-                        <td>REPLACE_WITH_SECTION_4_VALUE</td>
-                        <td>REPLACE_WITH_SECTION_4_VALUE</td>
-                    </tr>
-                    <tr>
-                        <td>Recall</td>
-                        <td>REPLACE_WITH_SECTION_4_VALUE</td>
-                        <td>REPLACE_WITH_SECTION_4_VALUE</td>
-                    </tr>
-                    <tr>
-                        <td>F1 score</td>
-                        <td>REPLACE_WITH_SECTION_4_VALUE</td>
-                        <td>REPLACE_WITH_SECTION_4_VALUE</td>
-                    </tr>
-                    <tr>
-                        <td>ROC-AUC</td>
-                        <td>REPLACE_WITH_SECTION_4_VALUE</td>
-                        <td>REPLACE_WITH_SECTION_4_VALUE</td>
-                    </tr>
-                </tbody>
-            </table>
+          <!-- ================================================= -->
+<!-- RESULTS -->
+<!-- ================================================= -->
+
+<section id="results">
+    <div class="section-number">04 · Results</div>
+    <h2>Model vs Baseline</h2>
+
+    <p>
+        The model was evaluated against a baseline using the same validation
+        framework. The evaluation focuses on ranking quality and classification
+        performance, with particular attention to Precision@20, Precision@50,
+        Precision@100, ROC-AUC, and Average Precision.
+    </p>
+
+    <div class="metric-grid">
+        <div class="metric">
+            <strong>1.0000</strong>
+            <span>Model Precision@20</span>
+        </div>
+
+        <div class="metric">
+            <strong>1.0000</strong>
+            <span>Model Precision@50</span>
+        </div>
+
+        <div class="metric">
+            <strong>1.0000</strong>
+            <span>Model Precision@100</span>
+        </div>
+
+        <div class="metric">
+            <strong>0.8764</strong>
+            <span>Model ROC-AUC</span>
+        </div>
+    </div>
+
+    <h3>Validation results</h3>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Metric</th>
+                <th>Baseline</th>
+                <th>Model</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            <tr>
+                <td>Precision@20</td>
+                <td>1.0000</td>
+                <td>1.0000</td>
+            </tr>
+
+            <tr>
+                <td>Precision@50</td>
+                <td>1.0000</td>
+                <td>1.0000</td>
+            </tr>
+
+            <tr>
+                <td>Precision@100</td>
+                <td>1.0000</td>
+                <td>1.0000</td>
+            </tr>
+
+            <tr>
+                <td>ROC-AUC</td>
+                <td>1.0000</td>
+                <td>0.8764</td>
+            </tr>
+
+            <tr>
+                <td>Average Precision</td>
+                <td>1.0000</td>
+                <td>0.9034</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <h3>Ranking performance</h3>
+
+    <p>
+        The model achieved a Precision@20, Precision@50, and Precision@100
+        of <strong>1.0000</strong>. This means that all evaluated top-20,
+        top-50, and top-100 positions in the generated ranking corresponded
+        to the positive class under the notebook's evaluation definition.
+    </p>
+
+    <p>
+        The model achieved a ROC-AUC of <strong>0.8764</strong> and an
+        Average Precision of <strong>0.9034</strong>. These values indicate
+        that the model provides meaningful separation and ranking performance
+        within the evaluated data and validation design.
+    </p>
+
+    <h3>Comparison with baseline</h3>
+
+    <p>
+        The baseline achieved the same perfect Precision@20, Precision@50,
+        and Precision@100 values as the model. However, the baseline also
+        produced a ROC-AUC of <strong>1.0000</strong> and an Average Precision
+        of <strong>1.0000</strong>, both higher than the corresponding model
+        values of 0.8764 and 0.9034.
+    </p>
+
+    <div class="callout">
+        <strong>Result interpretation:</strong>
+        Based on the executed Section 4 metrics, the model does not outperform
+        the baseline on ROC-AUC or Average Precision. Both approaches achieve
+        perfect Precision@20, Precision@50, and Precision@100 under the
+        reported evaluation. Therefore, the results should be reported
+        descriptively rather than claiming that the machine-learning model
+        improves upon the baseline.
+    </div>
+
+    <h3>Why the results matter</h3>
+
+    <p>
+        The evaluation demonstrates that the model can produce a highly
+        concentrated ranking of observed declining items at the evaluated
+        top-k positions. At the same time, the comparison shows that strong
+        top-k precision does not necessarily imply superior overall ranking
+        performance. ROC-AUC and Average Precision provide additional
+        information about how well scores separate and rank the two classes
+        across the evaluated population.
+    </p>
+
+    <h3>Model score distribution</h3>
+
+    <p>
+        The notebook also generated model score values for the evaluated
+        content items. These scores are used to construct the ranked
+        prioritisation queue described in the recommendations section.
+    </p>
+
+    <div class="callout">
+        <strong>Claim boundary:</strong>
+        The reported metrics describe performance under the executed
+        validation procedure. They do not establish causation, prove that
+        the model is superior to the baseline, or guarantee that acting on
+        a high-ranked recommendation will improve SEO performance.
+    </div>
+
+    <h3>Evaluation artifact</h3>
+
+    <p>
+        The Section 4 execution saved the variables required for subsequent
+        analysis to:
+    </p>
+
+    <p>
+        <code>work/outputs/section4_vars.pkl</code>
+    </p>
+
+    <p class="small">
+        The metrics above are reproduced from the executed Section 4 notebook
+        output and are not estimated values.
+    </p>
+</section>
 
             <h3>Interpretation</h3>
 
