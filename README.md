@@ -76,11 +76,10 @@ python main.py --input "There is a severe water leak near Main Market, block B c
                                   | Normalization         |
                                   +-----------+-----------+
                                               |
-                                              v
-+------------------------+        +-----------------------+
-| Knowledge / Context    | <----> | Autonomous AI Agent   |
-| Database               |        | Reasoning Engine      |
-+------------------------+        +-----------+-----------+
+                                              v+------------------------+        +-----------------------+
+                                              | Knowledge / Context    | <----> | Autonomous AI Agent   |
+                                              | Database               |        | Reasoning Engine      |
+                                              +------------------------+        +-----------+-----------+
                                               |
                                               v
                                   +-----------------------+
