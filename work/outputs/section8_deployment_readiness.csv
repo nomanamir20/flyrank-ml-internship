@@ -1,0 +1,9 @@
+check_item,status,details
+Primary Task Scope,PASS,Ranking / Scoring task restricted to keyword-article content lane.
+Intended Use Case,PASS,Decision support mechanism for content refresh prioritization queue.
+Decision Supported,PASS,Which keyword-article content items should a human reviewer inspect first?
+Primary Output Type,PASS,Ranked review priority scores; strictly non-automated decisioning.
+Human Oversight,PASS,Human review required before executing any content modification.
+Automated Actions Allowed,NONE,"No automatic publishing, rewriting, deleting, merging, or redirecting."
+Causal Claims Made,NONE,Model identifies patterns of decline; does not prove feature causality.
+Search Algorithm Claims,NONE,Model does not predict or claim to model Google's ranking algorithm.
