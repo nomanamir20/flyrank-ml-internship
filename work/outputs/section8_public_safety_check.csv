@@ -1,0 +1,7 @@
+safety_category,status,finding
+Client Names Included,NO,Pseudonymized client identifiers (client_id) used exclusively.
+Domains / URLs Included,NO,No raw URLs or website domain strings present in feature columns.
+Private Queries / Keywords,NO,No private customer search terms or target keywords exposed.
+Anonymization Status,PASSED,Dataset utilizes anonymized numerical/categorical proxy metrics.
+Data Leakage Risk Controls,PASSED,"Direct trend indicators (trend_direction, trend_pct) excluded."
+Public Safety Protocol Audit,CLEARED,"Safe for open deployment, publication, and reproduction."
