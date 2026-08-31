@@ -1,0 +1,8 @@
+artifact_id,section,artifact_type,description,file_path
+art_01_question,1. Question,text,Research question definition and decision scope,docs/01_question.md
+art_02_data_summary,2. Data,table,Dataset scope and target outcome metrics,data/summary/data_scope.csv
+art_03_methodology,3. Methodology,text,Model methodology leakage checks and validation design,docs/03_methodology.md
+art_04_results_table,4. Results,table,Baseline vs Learned Model performance metrics,reports/tables/model_vs_baseline.csv
+art_04_top20_candidates,4. Results,table,Top 20 model-ranked validation candidates,reports/tables/top20_validation_candidates.csv
+art_04_fig1_precision,4. Results,figure,Precision@K comparison visualization,reports/figures/fig1_precision_at_k.png
+art_04_fig2_overall,4. Results,figure,Overall ranking metrics ROC-AUC and AP visualization,reports/figures/fig2_overall_metrics.png
