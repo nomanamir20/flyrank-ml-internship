@@ -1,0 +1,6 @@
+metric,baseline_avg_position,learned_model,improvement
+Precision@20,0.15,1.0,+0.8500
+Precision@50,0.36,1.0,+0.6400
+Precision@100,0.47,1.0,+0.5300
+ROC-AUC,0.5791,0.8764,+0.2973
+Average Precision,0.5694,0.9034,+0.3340
