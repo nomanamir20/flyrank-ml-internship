@@ -1,0 +1,15 @@
+property,value
+Raw Dataset Observations,"30,000"
+Raw Dataset Variables,44
+Keyword-Article Lane Observations,"27,207"
+Total Model Features,40
+Numeric Features,29
+Categorical Features,11
+Excluded Variables,"trend_direction, trend_pct, is_declining_label, client_id, content_id"
+Unique Clients,31
+Validation Design,Client-Grouped Holdout Validation
+Training Rows,"24,599"
+Validation Rows,"2,608"
+Training Clients,26
+Validation Clients,5
+Client Overlap,0
